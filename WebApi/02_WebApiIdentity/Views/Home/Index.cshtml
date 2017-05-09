@@ -1,0 +1,47 @@
+﻿<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script type="text/javascript">
+        //打开页面的时候保存票据信息
+        var UserName = '@ViewBag.UserName';
+        var Ticket = '@ViewBag.Ticket';
+    </script>
+</head>
+<body>
+    <div>当前登录用户：@ViewBag.UserName</div>
+
+    <div id="div_test">
+
+    </div>
+    <script>
+        $(function () {
+            $.ajax({
+                type: "get",
+                url: "http://localhost:5115/Api/Charging/GetAllChargingData",
+                data: {},
+                beforeSend: function (XHR) {
+                    alert(Ticket);
+                    //发送ajax请求之前向http的head里面加入验证信息
+                    XHR.setRequestHeader('Authorization', 'BasicAuth ' + Ticket);
+                },
+                success: function (data, status) {
+                    if (status == "success") {
+                        $("#div_test").html(data);
+                    }
+                },
+                error: function (e) {
+                    $("#div_test").html("Error");
+                },
+                complete: function () {
+
+                }
+
+            });
+        });
+    </script>
+</body>
+</html>
